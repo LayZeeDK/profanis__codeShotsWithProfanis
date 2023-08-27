@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { isLoggedGuardFn } from './app/guards';
 import { DashboardComponent } from './app/pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
@@ -10,19 +9,8 @@ export const routes: Routes = [
   },
   {
     path: 'products',
-    loadComponent: async () =>
-      (await import('./app/pages/products/products.component'))
-        .ProductsComponent,
-    canActivate: [isLoggedGuardFn],
-  },
-  {
-    path: 'products/:id',
-    loadComponent: async () =>
-      (
-        await import(
-          './app/pages/products/product-detail/product-detail.component'
-        )
-      ).ProductDetailComponent,
+    loadChildren: async () =>
+      (await import('./app/pages/products/products.routes')).productsRoutes,
   },
   {
     path: 'no-access',
