@@ -10,15 +10,14 @@ import { ProductsService } from 'src/app/services/products.service';
   imports: [NgFor, RouterLink, MatCardModule, AsyncPipe],
   template: `
     <h2>Products</h2>
-    <ul class="products-container">
+    <ul class="products-container" data-test="products">
       <li
         class="products-container--product-item"
-        [routerLink]="['/products', product.id]"
         *ngFor="let product of products$ | async"
       >
-        <div>
+        <a [routerLink]="['/products', product.id]">
           {{ product.name }}
-        </div>
+        </a>
       </li>
     </ul>
   `,

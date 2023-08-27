@@ -1,11 +1,9 @@
 import { By } from '@angular/platform-browser';
-import { RouterLink } from '@angular/router';
 import {
-  SpectacularFeatureHarness,
   createFeatureHarness,
+  SpectacularFeatureHarness,
 } from '@ngworker/spectacular';
-import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { ProductsComponent } from './products.component';
+import { productsRoutes } from './products.routes';
 /**
  * Routing Component
  */
@@ -14,28 +12,18 @@ describe('ProductsComponent', () => {
   beforeEach(() => {
     harness = createFeatureHarness({
       featurePath: 'products',
-      routes: [
-        {
-          path: 'products',
-          component: ProductsComponent,
-        },
-        {
-          path: 'products/:id',
-          component: ProductDetailComponent,
-        },
-      ],
+      routes: [{ path: 'products', loadChildren: () => productsRoutes }],
     });
   });
 
   it('should navigate to product details page', async () => {
-    // Arrange (query the DOM for the first routerLink element)
+    // Arrange (query the DOM for the first link)
     const linkItems = harness.rootFixture.debugElement.queryAll(
-      By.directive(RouterLink)
+      By.css('[data-test="products"] a')
     );
-    // Act (click the first routerLink element)
-    linkItems[0].triggerEventHandler('click', {
-      button: 0,
-    });
+
+    // Act (click the first link)
+    linkItems[0].nativeElement.click();
 
     await harness.rootFixture.whenStable();
 

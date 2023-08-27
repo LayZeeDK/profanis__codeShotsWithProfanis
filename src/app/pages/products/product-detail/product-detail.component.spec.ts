@@ -1,11 +1,10 @@
 import { fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
-  SpectacularFeatureHarness,
   createFeatureHarness,
+  SpectacularFeatureHarness,
 } from '@ngworker/spectacular';
-import { ProductsComponent } from '../products.component';
-import { ProductDetailComponent } from './product-detail.component';
+import { productsRoutes } from '../products.routes';
 
 /**
  * Routed Component
@@ -15,16 +14,7 @@ describe('ProductDetailComponent', () => {
   beforeEach(() => {
     harness = createFeatureHarness({
       featurePath: 'products',
-      routes: [
-        {
-          path: 'products',
-          component: ProductsComponent,
-        },
-        {
-          path: 'products/:id',
-          component: ProductDetailComponent,
-        },
-      ],
+      routes: [{ path: 'products', loadChildren: () => productsRoutes }],
     });
   });
 
@@ -32,12 +22,13 @@ describe('ProductDetailComponent', () => {
     // Arrange (navigate to the product detail page)
     await harness.router.navigate(['~', '1']);
 
-    // Act (get the active component)
-    const component =
-      await harness.rootComponent.getActiveComponent<ProductDetailComponent>();
+    // Act
 
     // Assert (check the productId)
-    expect(component.productId.toString()).toBe('1');
+    const productId = harness.rootFixture.debugElement.query(
+      By.css('[data-test="product-id"]')
+    ).nativeElement;
+    expect(productId.textContent.trim()).toBe('1');
   });
 
   it('should navigate back to products list if the provided productId is wrong', async () => {

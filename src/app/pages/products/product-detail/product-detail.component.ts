@@ -15,7 +15,8 @@ import { ProductsService } from 'src/app/services/products.service';
       >
     </p>
     <div class="product-detail-container">
-      You are seeing the product with id: <span>{{ productId }}</span>
+      You are seeing the product with id:
+      <span data-test="product-id">{{ productId }}</span>
     </div>
   `,
   styles: [
